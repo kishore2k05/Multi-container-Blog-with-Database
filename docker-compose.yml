@@ -1,0 +1,40 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: kishore
+      MYSQL_PASSWORD: 110505
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - wordpress-network
+
+  wordpress:
+    image: wordpress:latest
+    container_name: wordpress-site
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: mysql
+      WORDPRESS_DB_USER: kishore
+      WORDPRESS_DB_PASSWORD: 110505
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wordpress-data:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - wordpress-network
+
+volumes:
+  mysql-data:
+  wordpress-data:
+
+networks:
+  wordpress-network:
+    driver: bridge

@@ -1,13 +1,1 @@
-# MySQL Configuration
-MYSQL_ROOT_PASSWORD=rootpassword
-MYSQL_DATABASE=wordpress
-MYSQL_USER=kishore
-MYSQL_PASSWORD=110505
-
-# WordPress Configuration
-WORDPRESS_DB_USER=kishore
-WORDPRESS_DB_PASSWORD=110505
-WORDPRESS_DB_NAME=wordpress
-
-# Port
-WORDPRESS_PORT=8080
+.env

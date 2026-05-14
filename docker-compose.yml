@@ -62,9 +62,38 @@ services:
       timeout: 10s
       retries: 5
 
+  db-backup:
+    image: mysql:8.0
+    container_name: db-backup
+    restart: unless-stopped
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - db-backups:/backups
+    networks:
+      - wordpress-network
+    depends_on:
+      mysql:
+        condition: service_healthy
+    entrypoint: |
+      /bin/sh -c '
+      while true; do
+        TIMESTAMP=$$(date +%Y%m%d_%H%M%S)
+        echo "Creating backup at $$TIMESTAMP..."
+        mysqldump --no-tablespaces -h $$MYSQL_HOST -u $$MYSQL_USER -p$$MYSQL_PASSWORD $$MYSQL_DATABASE > /backups/backup_$$TIMESTAMP.sql
+        echo "Backup saved: backup_$$TIMESTAMP.sql"
+        find /backups -name "*.sql" -mtime +7 -delete
+        echo "Old backups cleaned up!"
+        sleep 86400
+      done'
+
 volumes:
   mysql-data:
   wordpress-data:
+  db-backups:
 
 networks:
   wordpress-network:

@@ -149,4 +149,3 @@ docker exec -it mysql-db mysql -u root -p
 ## 👨‍💻 Author
 
 **Kishore Gowthaman**
-- GitHub: [@kishore2k05](https://github.com/kishore2k05)
